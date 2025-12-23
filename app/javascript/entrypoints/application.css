@@ -1,0 +1,14 @@
+/**
+ * Tailwind CSS v4 Import
+ *
+ * Tailwind v4 uses a single @import directive instead of the old v3 approach
+ * (@tailwind base/components/utilities).
+ *
+ * This import:
+ * - Loads Tailwind's base styles (reset/normalize)
+ * - Generates utility classes (flex, text-blue-500, etc.)
+ * - Automatically scans your project files for Tailwind classes
+ *
+ * No tailwind.config.js needed - Tailwind v4 auto-detects your files!
+ */
+@import "tailwindcss";
