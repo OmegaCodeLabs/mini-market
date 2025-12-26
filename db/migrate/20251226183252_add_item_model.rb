@@ -1,5 +1,7 @@
 class AddItemModel < ActiveRecord::Migration[8.0]
   def change
+    enable_extension 'pgcrypto' unless extension_enabled?('pgcrypto')
+
     create_table :items do |t|
       t.string :name, null: false
       t.text :description
