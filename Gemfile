@@ -57,3 +57,9 @@ group :development do
 end
 
 gem "vite_rails"
+
+# Authentication
+gem "devise"
+
+# Authorization
+gem "pundit"
