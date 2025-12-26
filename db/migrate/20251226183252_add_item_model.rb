@@ -5,7 +5,6 @@ class AddItemModel < ActiveRecord::Migration[8.0]
       t.text :description
       t.string :sku, null: false
       t.boolean :active, default: true
-      t.integer :category_id
       t.decimal :price, precision: 12, scale: 2, null: false
       t.integer :stock_quantity, default: 0, null: false
       t.uuid :uuid, null: false, default: "gen_random_uuid()"

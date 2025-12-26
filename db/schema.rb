@@ -38,7 +38,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_26_184947) do
     t.text "description"
     t.string "sku", null: false
     t.boolean "active", default: true
-    t.integer "category_id"
     t.decimal "price", precision: 12, scale: 2, null: false
     t.integer "stock_quantity", default: 0, null: false
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
