@@ -17,9 +17,7 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%# Vite handles all JavaScript and CSS, no need for importmap %>
     <%= vite_client_tag %>
     <%= vite_javascript_tag 'application' %>
     <!--
@@ -35,6 +33,76 @@
   </head>
 
   <body>
+    <nav class="bg-blue-600 text-white shadow-lg">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex justify-between items-center">
+          <!-- Logo -->
+          <div class="text-2xl font-bold">
+            <%= link_to "Mini Market", root_path, class: "hover:text-blue-200" %>
+          </div>
+
+          <!-- Desktop Menu (hidden on mobile) -->
+          <ul class="flex gap-6 desktop-menu">
+            <li><%= link_to "Home", root_path, class: "hover:text-blue-200" %></li>
+            <li><%= link_to "Products", "#", class: "hover:text-blue-200" %></li>
+            <li><%= link_to "Cart", "#", class: "hover:text-blue-200" %></li>
+          </ul>
+
+          <!-- Mobile Menu Button (hidden on desktop) -->
+          <button id="mobile-menu-button" class="text-white focus:outline-none mobile-menu-btn" style="display:none; font-size: 24px;">
+            ☰
+          </button>
+        </div>
+
+        <!-- Mobile Menu (hidden by default) -->
+        <div id="mobile-menu" class="mobile-menu-dropdown" style="display:none; margin-top:1rem;">
+          <%= link_to "Home", root_path, class: "py-2 hover:text-blue-200", style: "display:block;" %>
+          <%= link_to "Products", "#", class: "py-2 hover:text-blue-200", style: "display:block;" %>
+          <%= link_to "Cart", "#", class: "py-2 hover:text-blue-200", style: "display:block;" %>
+        </div>
+      </div>
+    </nav>
+
+    <style>
+      /* Responsive navbar - Mobile first */
+      @media (max-width: 767px) {
+        .desktop-menu {
+          display: none !important;
+        }
+        .mobile-menu-btn {
+          display: block !important;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .desktop-menu {
+          display: flex !important;
+        }
+        .mobile-menu-btn {
+          display: none !important;
+        }
+        .mobile-menu-dropdown {
+          display: none !important;
+        }
+      }
+    </style>
+
+    <script>
+      // Mobile menu toggle
+      document.addEventListener('DOMContentLoaded', () => {
+        const button = document.getElementById('mobile-menu-button');
+        const menu = document.getElementById('mobile-menu');
+
+        button?.addEventListener('click', () => {
+          if (menu.style.display === 'none') {
+            menu.style.display = 'block';
+          } else {
+            menu.style.display = 'none';
+          }
+        });
+      });
+    </script>
+
     <%= yield %>
   </body>
 </html>
