@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_27_002142) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_27_004127) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
@@ -67,6 +67,38 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_002142) do
     t.index ["sku"], name: "index_items_on_sku", unique: true
   end
 
+  create_table "order_items", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "item_id", null: false
+    t.string "item_name", null: false
+    t.string "item_sku"
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.integer "quantity", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_order_items_on_item_id"
+    t.index ["order_id", "item_id"], name: "index_order_items_on_order_id_and_item_id"
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id", null: false
+    t.decimal "total", precision: 10, scale: 2, null: false
+    t.string "status", default: "pending", null: false
+    t.string "shipping_name"
+    t.string "shipping_address"
+    t.string "shipping_city"
+    t.string "shipping_state"
+    t.string "shipping_zip"
+    t.string "shipping_country"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_orders_on_status"
+    t.index ["user_id"], name: "index_orders_on_user_id"
+    t.index ["uuid"], name: "index_orders_on_uuid", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
     t.string "name"
@@ -91,4 +123,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_27_002142) do
   add_foreign_key "carts", "users"
   add_foreign_key "item_categories", "categories"
   add_foreign_key "item_categories", "items"
+  add_foreign_key "order_items", "items"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "orders", "users"
 end
