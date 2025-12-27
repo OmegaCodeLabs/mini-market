@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_26_195052) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_27_001609) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pgcrypto"
+
+  create_table "carts", force: :cascade do |t|
+    t.uuid "uuid", default: -> { "gen_random_uuid()" }, null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_carts_on_user_id", unique: true
+    t.index ["uuid"], name: "index_carts_on_uuid", unique: true
+  end
 
   create_table "categories", force: :cascade do |t|
     t.string "name", null: false
@@ -66,6 +75,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_26_195052) do
     t.index ["uuid"], name: "index_users_on_uuid", unique: true
   end
 
+  add_foreign_key "carts", "users"
   add_foreign_key "item_categories", "categories"
   add_foreign_key "item_categories", "items"
 end

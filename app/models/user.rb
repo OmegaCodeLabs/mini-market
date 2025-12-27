@@ -4,6 +4,13 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  # Relationships
+  has_one :cart, dependent: :destroy
+  has_many :orders, dependent: :destroy
+
+  # Auto-create cart when user is created
+  after_create :create_user_cart
+
   # Validations
   validates :uuid, uniqueness: true, allow_nil: true
   validates :username, uniqueness: true, allow_blank: true,
@@ -31,5 +38,12 @@ class User < ApplicationRecord
   # Full name from first + last name
   def full_name
     [name, last_name].compact.join(' ').presence
+  end
+
+  private
+
+  # Create cart for new user
+  def create_user_cart
+    Cart.create!(user: self)
   end
 end
