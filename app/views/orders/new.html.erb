@@ -1,0 +1,88 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-6">Checkout</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Shipping Form -->
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Shipping Information</h2>
+
+        <%= form_with(model: @order, class: "space-y-4") do |f| %>
+          <div>
+            <%= f.label :shipping_name, "Full Name", class: "block font-semibold mb-2" %>
+            <%= f.text_field :shipping_name, required: true, class: "w-full border rounded px-4 py-2" %>
+          </div>
+
+          <div>
+            <%= f.label :shipping_address, "Address", class: "block font-semibold mb-2" %>
+            <%= f.text_field :shipping_address, required: true, class: "w-full border rounded px-4 py-2" %>
+          </div>
+
+          <div>
+            <%= f.label :shipping_city, "City", class: "block font-semibold mb-2" %>
+            <%= f.text_field :shipping_city, required: true, class: "w-full border rounded px-4 py-2" %>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= f.label :shipping_state, "State", class: "block font-semibold mb-2" %>
+              <%= f.text_field :shipping_state, class: "w-full border rounded px-4 py-2" %>
+            </div>
+
+            <div>
+              <%= f.label :shipping_zip, "ZIP Code", class: "block font-semibold mb-2" %>
+              <%= f.text_field :shipping_zip, required: true, class: "w-full border rounded px-4 py-2" %>
+            </div>
+          </div>
+
+          <div>
+            <%= f.label :shipping_country, "Country", class: "block font-semibold mb-2" %>
+            <%= f.text_field :shipping_country, value: "USA", required: true, class: "w-full border rounded px-4 py-2" %>
+          </div>
+
+          <%= f.submit "Place Order", class: "w-full bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700 cursor-pointer font-semibold text-lg" %>
+        <% end %>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+
+        <div class="space-y-4 mb-6">
+          <% @cart.cart_items.each do |cart_item| %>
+            <div class="flex justify-between items-start border-b pb-2">
+              <div class="flex-1">
+                <p class="font-semibold"><%= cart_item.item.name %></p>
+                <p class="text-sm text-gray-600">Qty: <%= cart_item.quantity %> × $<%= number_with_precision(cart_item.item.price, precision: 2) %></p>
+              </div>
+              <p class="font-bold">$<%= number_with_precision(cart_item.subtotal, precision: 2) %></p>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="border-t pt-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-gray-600">Subtotal:</span>
+            <span class="font-semibold">$<%= number_with_precision(@cart.total, precision: 2) %></span>
+          </div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-gray-600">Shipping:</span>
+            <span class="font-semibold">FREE</span>
+          </div>
+          <div class="flex justify-between items-center text-xl font-bold border-t pt-2 mt-2">
+            <span>Total:</span>
+            <span class="text-green-600">$<%= number_with_precision(@cart.total, precision: 2) %></span>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t">
+          <p class="text-sm text-gray-600"><%= pluralize(@cart.item_count, "item") %> in your order</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 text-center">
+      <%= link_to "← Back to Cart", cart_path, class: "text-blue-600 hover:underline" %>
+    </div>
+  </div>
+</div>

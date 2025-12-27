@@ -1,0 +1,54 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-4">
+      <%= link_to "← Back to Products", items_path, class: "text-blue-600 hover:underline" %>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-lg p-6">
+      <div class="flex justify-between items-start mb-4">
+        <h1 class="text-4xl font-bold"><%= @item.name %></h1>
+        <% if current_user&.admin? %>
+          <div class="flex gap-2">
+            <%= link_to "Edit", edit_item_path(@item), class: "bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600" %>
+            <%= button_to "Delete", item_path(@item), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" %>
+          </div>
+        <% end %>
+      </div>
+
+      <% if @item.categories.any? %>
+        <div class="mb-4">
+          <% @item.categories.each do |category| %>
+            <%= link_to category.name, category, class: "inline-block bg-blue-100 text-blue-800 rounded px-3 py-1 text-sm hover:bg-blue-200" %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <p class="text-4xl font-bold text-green-600 mb-4">$<%= number_with_precision(@item.price, precision: 2) %></p>
+
+      <% if @item.sku.present? %>
+        <p class="text-gray-600 mb-2"><strong>SKU:</strong> <%= @item.sku %></p>
+      <% end %>
+
+      <p class="text-gray-600 mb-4"><strong>In Stock:</strong> <%= @item.stock_quantity %> units</p>
+
+      <% if @item.description.present? %>
+        <div class="mb-6">
+          <h2 class="text-2xl font-semibold mb-2">Description</h2>
+          <p class="text-gray-700"><%= simple_format(@item.description) %></p>
+        </div>
+      <% end %>
+
+      <% if user_signed_in? && @item.in_stock? %>
+        <%= form_with url: cart_items_path, method: :post, class: "flex gap-4 items-center" do |f| %>
+          <%= f.hidden_field :item_id, value: @item.id %>
+          <%= f.number_field :quantity, value: 1, min: 1, max: @item.stock_quantity, class: "border rounded px-4 py-2 w-20" %>
+          <%= f.submit "Add to Cart", class: "bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 cursor-pointer" %>
+        <% end %>
+      <% elsif !user_signed_in? %>
+        <p class="text-gray-600"><%= link_to "Sign in", new_user_session_path, class: "text-blue-600 hover:underline" %> to add items to your cart.</p>
+      <% else %>
+        <p class="text-red-600 font-semibold">Out of Stock</p>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Shopping Cart</h1>
+
+  <% if @cart_items.any? %>
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+      <% @cart_items.each do |cart_item| %>
+        <div class="flex items-center justify-between border-b py-4 last:border-b-0">
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold">
+              <%= link_to cart_item.item.name, cart_item.item, class: "hover:text-blue-600" %>
+            </h3>
+            <p class="text-gray-600">$<%= number_with_precision(cart_item.item.price, precision: 2) %> each</p>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <%= form_with(model: cart_item, url: cart_item_path(cart_item), method: :patch, class: "flex items-center gap-2") do |f| %>
+              <%= f.number_field :quantity, min: 1, max: cart_item.item.stock_quantity, value: cart_item.quantity, class: "border rounded px-3 py-1 w-20" %>
+              <%= f.submit "Update", class: "bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 cursor-pointer text-sm" %>
+            <% end %>
+
+            <p class="text-xl font-bold text-green-600 w-24 text-right">
+              $<%= number_with_precision(cart_item.subtotal, precision: 2) %>
+            </p>
+
+            <%= button_to "Remove", cart_item_path(cart_item), method: :delete, class: "bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 text-sm", data: { turbo_confirm: "Remove this item?" } %>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="mt-6 pt-4 border-t">
+        <div class="flex justify-between items-center text-2xl font-bold">
+          <span>Total:</span>
+          <span class="text-green-600">$<%= number_with_precision(@cart.total, precision: 2) %></span>
+        </div>
+        <div class="text-right text-gray-600 mt-2">
+          <%= pluralize(@cart.item_count, "item") %> in cart
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-4 justify-end">
+        <%= link_to "Continue Shopping", items_path, class: "bg-gray-500 text-white px-6 py-3 rounded hover:bg-gray-600" %>
+        <%= link_to "Proceed to Checkout", new_order_path, class: "bg-green-600 text-white px-6 py-3 rounded hover:bg-green-700" %>
+      </div>
+    </div>
+  <% else %>
+    <div class="bg-white rounded-lg shadow-lg p-6 text-center">
+      <p class="text-xl text-gray-600 mb-4">Your cart is empty</p>
+      <%= link_to "Browse Products", items_path, class: "bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 inline-block" %>
+    </div>
+  <% end %>
+</div>
