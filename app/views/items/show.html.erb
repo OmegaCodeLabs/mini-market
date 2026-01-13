@@ -9,8 +9,8 @@
         <h1 class="text-4xl font-bold"><%= @item.name %></h1>
         <% if current_user&.admin? %>
           <div class="flex gap-2">
-            <%= link_to "Edit", edit_item_path(@item), class: "bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600" %>
-            <%= button_to "Delete", item_path(@item), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700" %>
+            <%= link_to "Edit", edit_item_path(@item), class: "bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 font-semibold", style: "background-color: #eab308; color: white;" %>
+            <%= button_to "Delete", item_path(@item), method: :delete, data: { turbo_confirm: "Are you sure?" }, class: "bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 font-semibold", style: "background-color: #dc2626; color: white;" %>
           </div>
         <% end %>
       </div>
@@ -41,8 +41,8 @@
       <% if user_signed_in? && @item.in_stock? %>
         <%= form_with url: cart_items_path, method: :post, class: "flex gap-4 items-center" do |f| %>
           <%= f.hidden_field :item_id, value: @item.id %>
-          <%= f.number_field :quantity, value: 1, min: 1, max: @item.stock_quantity, class: "border rounded px-4 py-2 w-20" %>
-          <%= f.submit "Add to Cart", class: "bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 cursor-pointer" %>
+          <%= f.number_field :quantity, value: 1, min: 1, max: @item.stock_quantity, class: "border border-gray-300 rounded px-4 py-2 w-20" %>
+          <%= f.submit "Add to Cart", class: "bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 font-semibold cursor-pointer", style: "background-color: #16a34a; color: white;" %>
         <% end %>
       <% elsif !user_signed_in? %>
         <p class="text-gray-600"><%= link_to "Sign in", new_user_session_path, class: "text-blue-600 hover:underline" %> to add items to your cart.</p>
